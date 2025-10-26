@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search, Download, Filter } from "lucide-react";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { Patient, Trial } from "@/types/database";
 
@@ -201,7 +201,7 @@ export default function DashboardPage() {
           <Card className="stat-card relative overflow-hidden slide-up delay-3">
             <CardHeader className="pb-3">
               <CardDescription className="text-sm uppercase tracking-wider font-semibold">
-                Possible Trials
+                Prospective Trials
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -238,14 +238,6 @@ export default function DashboardPage() {
                 value={patientSearch}
                 onChange={(e) => setPatientSearch(e.target.value)}
               />
-              <div className="flex gap-2">
-                <Button variant="outline" className="text-xs">
-                  <Download className="mr-2 h-4 w-4" /> Export CSV
-                </Button>
-                <Button variant="outline" className="text-xs">
-                  <Filter className="mr-2 h-4 w-4" /> Filter
-                </Button>
-              </div>
             </div>
 
             <Card className="overflow-hidden">
@@ -319,14 +311,6 @@ export default function DashboardPage() {
                 value={trialSearch}
                 onChange={(e) => setTrialSearch(e.target.value)}
               />
-              <div className="flex gap-2">
-                <Button variant="outline" className="text-xs">
-                  <Download className="mr-2 h-4 w-4" /> Export CSV
-                </Button>
-                <Button variant="outline" className="text-xs">
-                  <Filter className="mr-2 h-4 w-4" /> Filter
-                </Button>
-              </div>
             </div>
 
             <Card className="overflow-hidden">
@@ -745,7 +729,7 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
           />
           <p className="text-xs text-muted-foreground mt-1">Enter multiple medications separated by commas</p>
         </div>
-      </div>
+    </div>
 
       <Button type="submit" className="w-full bg-primary text-primary-foreground h-12 text-base mt-6">
         Add Patient
