@@ -83,6 +83,17 @@ export default function DashboardPage() {
   // Calculate stats
   const stats = {
     totalPatients: patients.length,
+    matchedPatients: patients.filter(p => 
+      p.current_eligible_trials && 
+      Array.isArray(p.current_eligible_trials) && 
+      p.current_eligible_trials.length > 0
+    ).length,
+    totalTrialsFound: patients.reduce((sum, p) => {
+      if (p.current_eligible_trials && Array.isArray(p.current_eligible_trials)) {
+        return sum + p.current_eligible_trials.length;
+      }
+      return sum;
+    }, 0)
   };
 
   const getStatusBadgeClass = (status: string) => {
@@ -103,40 +114,19 @@ export default function DashboardPage() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="border-b bg-card sticky top-0 z-50 backdrop-blur-sm" style={{ backgroundColor: 'hsl(var(--card))' }}>
-        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="fade-in">
             <h1 className="text-4xl glow-text mb-1">TrialSync</h1>
             <p className="text-muted-foreground text-sm mt-1 uppercase tracking-wider">
               Clinical Recruitment Platform
             </p>
           </div>
-          <div className="flex items-center gap-4 fade-in delay-1">
-            <Dialog open={isPatientDialogOpen} onOpenChange={setIsPatientDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5">
-                  <Plus className="mr-2 h-4 w-4" /> Add Patient
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-card border-border max-w-4xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader className="mb-6">
-                  <DialogTitle className="text-2xl">Add New Patient</DialogTitle>
-                  <DialogDescription className="text-base">
-                    Enter patient information to add them to the system.
-                  </DialogDescription>
-                </DialogHeader>
-                <PatientForm onSuccess={() => {
-                  setIsPatientDialogOpen(false);
-                  fetchData();
-                }} />
-              </DialogContent>
-            </Dialog>
-          </div>
         </div>
       </header>
 
       {/* Stats Overview */}
       <section className="max-w-7xl mx-auto px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="stat-card relative overflow-hidden slide-up delay-2">
             <CardHeader className="pb-3">
               <CardDescription className="text-sm uppercase tracking-wider font-semibold">
@@ -145,6 +135,38 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-bold">{stats.totalPatients}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="stat-card relative overflow-hidden slide-up delay-3">
+            <CardHeader className="pb-3">
+              <CardDescription className="text-sm uppercase tracking-wider font-semibold">
+                Matched Patients
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold">{stats.matchedPatients}</div>
+              {stats.totalPatients > 0 && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  {Math.round((stats.matchedPatients / stats.totalPatients) * 100)}% of patients
+                </p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="stat-card relative overflow-hidden slide-up delay-4">
+            <CardHeader className="pb-3">
+              <CardDescription className="text-sm uppercase tracking-wider font-semibold">
+                Eligible Trials
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold">{stats.totalTrialsFound}</div>
+              {stats.matchedPatients > 0 && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  {(stats.totalTrialsFound / stats.matchedPatients).toFixed(1)} avg per patient
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -162,6 +184,26 @@ export default function DashboardPage() {
                 value={patientSearch}
                 onChange={(e) => setPatientSearch(e.target.value)}
               />
+              
+              <Dialog open={isPatientDialogOpen} onOpenChange={setIsPatientDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5">
+                    <Plus className="mr-2 h-4 w-4" /> Add Patient
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-card border-border max-w-4xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader className="mb-6">
+                    <DialogTitle className="text-2xl">Add New Patient</DialogTitle>
+                    <DialogDescription className="text-base">
+                      Enter patient information to add them to the system.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <PatientForm onSuccess={() => {
+                    setIsPatientDialogOpen(false);
+                    fetchData();
+                  }} />
+                </DialogContent>
+              </Dialog>
             </div>
 
             <Card className="overflow-hidden">
