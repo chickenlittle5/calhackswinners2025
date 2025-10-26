@@ -68,7 +68,7 @@ class TranscriptManager:
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             room = self.metadata.get("room_name", "unknown")
-            filepath = f"transcript_{room}_{timestamp}.json"
+            filepath = f"./transcripts/transcript_{room}_{timestamp}.json"
 
         data = self.get_full_data()
 
