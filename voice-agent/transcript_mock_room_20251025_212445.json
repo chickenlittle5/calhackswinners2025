@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "room_name": "mock_room",
+    "session_start": "2025-10-25T21:22:31.819611"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Yes little bro.",
+      "timestamp": "2025-10-25T21:22:49.511935"
+    },
+    {
+      "role": "user",
+      "content": "Yvonne.",
+      "timestamp": "2025-10-25T21:23:03.559432"
+    },
+    {
+      "role": "user",
+      "content": "Seventeen.",
+      "timestamp": "2025-10-25T21:23:10.549120"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-25T21:23:16.247252"
+    },
+    {
+      "role": "user",
+      "content": "I'm taking",
+      "timestamp": "2025-10-25T21:23:25.975851"
+    },
+    {
+      "role": "user",
+      "content": "Steroids.",
+      "timestamp": "2025-10-25T21:23:27.247025"
+    },
+    {
+      "role": "user",
+      "content": "Now.",
+      "timestamp": "2025-10-25T21:23:36.742631"
+    },
+    {
+      "role": "user",
+      "content": "No I don't",
+      "timestamp": "2025-10-25T21:23:52.548865"
+    },
+    {
+      "role": "user",
+      "content": "No.",
+      "timestamp": "2025-10-25T21:24:01.642412"
+    },
+    {
+      "role": "user",
+      "content": "Hello.",
+      "timestamp": "2025-10-25T21:24:27.256071"
+    },
+    {
+      "role": "user",
+      "content": "Man.",
+      "timestamp": "2025-10-25T21:24:27.564135"
+    },
+    {
+      "role": "user",
+      "content": "Shit.",
+      "timestamp": "2025-10-25T21:24:37.043225"
+    },
+    {
+      "role": "user",
+      "content": "Goodbye.",
+      "timestamp": "2025-10-25T21:24:41.662469"
+    },
+    {
+      "role": "user",
+      "content": "Man.",
+      "timestamp": "2025-10-25T21:24:42.001482"
+    }
+  ],
+  "message_count": 14,
+  "exported_at": "2025-10-25T21:24:45.681837"
+}

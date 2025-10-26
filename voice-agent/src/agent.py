@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -14,6 +15,9 @@ from livekit.agents import (
 )
 from livekit.plugins import noise_cancellation, silero, hume
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.agents import AgentTask, function_tool
+from livekit.agents import get_job_context
+from transcribe import get_transcript_manager
 
 logger = logging.getLogger("agent")
 
@@ -23,11 +27,26 @@ load_dotenv(".env.local")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="""You are a helpful voice AI assistant. The user is interacting with you via voice, even if you perceive the conversation as text.
-            You eagerly assist users with their questions by providing information from your extensive knowledge.
+            instructions="""You are a helpful voice AI assistant. 
+            The patient is interacting with you via voice, even if you perceive the conversation as text.
+            Your purpose is to determine the eligbility of patients for clinical trials. 
+            You will ask questions to the user for the following information: First Name
+            Ask questions for one field at a time. If the user's response is incomprehensible or doesn't make sense for the question (e.g. "I'm Asian" for "What is your name?" or a 20 digit phone number or an email without a domain), then repeat the question again until you receive a reasonable response.
+            However, be patient towards patients and don't rush or be rude towards them.
             Your responses are concise, to the point, and without any complex formatting or punctuation including emojis, asterisks, or other symbols.
-            You are curious, friendly, and have a sense of humor.""",
+            You are friendly but to the point.""",
         )
+
+    async def on_enter(self) -> None:
+        if await CollectConsent(chat_ctx=self.chat_ctx):
+            await self.session.generate_reply(instructions="Offer your assistance to the user.")
+        else:
+            await self.session.generate_reply(instructions="Inform the user that you are unable to proceed and will end the call.")
+            # Wait for the goodbye message to finish playing before disconnecting
+            await asyncio.sleep(3)
+            job_ctx = get_job_context()
+            # Disconnect from the room to end the call
+            await job_ctx.room.disconnect()
 
     # To add tools, use the @function_tool decorator.
     # Here's an example that adds a simple weather tool.
@@ -68,10 +87,11 @@ async def entrypoint(ctx: JobContext):
         llm="openai/gpt-4.1-mini",
         # Text-to-speech (TTS) is your agent's voice, turning the LLM's text into speech that the user can hear
         # See all available models as well as voice selections at https://docs.livekit.io/agents/models/tts/
-        tts=hume.TTS(
-            voice=hume.VoiceByName(name="Fumiko", provider=hume.VoiceProvider.hume),
-            description="The voice exudes calm, serene, and peaceful qualities, like a gentle stream flowing through a quiet forest.",
-        ),
+        tts="cartesia/sonic-2",
+        # tts=hume.TTS(
+        #     voice=hume.VoiceByName(name="Colton Rivers", provider=hume.VoiceProvider.hume),
+        #     description="The voice exudes calm, serene, and peaceful qualities, like a gentle stream flowing through a quiet forest.",
+        # ),
         # VAD and turn detection are used to determine when the user is speaking and when the agent should respond
         # See more at https://docs.livekit.io/agents/build/turns
         turn_detection=MultilingualModel(),
@@ -100,11 +120,35 @@ async def entrypoint(ctx: JobContext):
         metrics.log_metrics(ev.metrics)
         usage_collector.collect(ev.metrics)
 
+    # Get transcript manager and set metadata
+    transcript_mgr = get_transcript_manager()
+    transcript_mgr.set_metadata(room_name=ctx.room.name)
+
+    # Capture both user and agent messages when added to chat history
+    @session.on("conversation_item_added")
+    def _on_conversation_item_added(ev):
+        # Extract text content from the chat message
+        message_text = ""
+        for content in ev.item.content:
+            if hasattr(content, 'text'):
+                message_text += content.text
+
+        role = ev.item.role
+        if message_text:
+            logger.info(f"{role} said: {message_text}")
+            transcript_mgr.add_message(role=role, content=message_text)
+
     async def log_usage():
         summary = usage_collector.get_summary()
         logger.info(f"Usage: {summary}")
 
+    # Save conversation transcript when session ends
+    async def save_transcript():
+        filepath = transcript_mgr.save_to_file()
+        logger.info(f"Transcript saved to {filepath} with {len(transcript_mgr.transcript)} messages")
+
     ctx.add_shutdown_callback(log_usage)
+    ctx.add_shutdown_callback(save_transcript)
 
     # # Add a virtual avatar to the session, if desired
     # # For other providers, see https://docs.livekit.io/agents/models/avatar/
@@ -127,6 +171,33 @@ async def entrypoint(ctx: JobContext):
     # Join the room and connect to the user
     await ctx.connect()
 
+class CollectConsent(AgentTask[bool]):
+    def __init__(self, chat_ctx=None):
+        super().__init__(
+            instructions="""
+            Ask for recording consent and get a clear yes or no answer.
+            Be polite and professional.
+            """,
+            chat_ctx=chat_ctx,
+        )
+
+    async def on_enter(self) -> None:
+        await self.session.generate_reply(
+            instructions="""
+            Briefly introduce yourself, then ask for permission to record the call for quality assurance and training purposes.
+            Make it clear that they can decline.
+            """
+        )
+
+    @function_tool
+    async def consent_given(self) -> None:
+        """Use this when the user gives consent to record."""
+        self.complete(True)
+
+    @function_tool
+    async def consent_denied(self) -> None:
+        """Use this when the user denies consent to record."""
+        self.complete(False)
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, prewarm_fnc=prewarm))
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="my-telephony-agent", prewarm_fnc=prewarm))
