@@ -554,8 +554,8 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
     phone_number: '',
     location: '',
     condition_summary: '',
-    diagnosed_conditions: [] as string[],
-    current_medications: [] as string[]
+    diagnosed_conditions: '',
+    current_medications: ''
   });
 
   const supabase = createClient();
@@ -565,20 +565,67 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
     
     const submitData = {
       ...formData,
-      age: formData.age ? parseInt(formData.age) : null
+      age: formData.age ? parseInt(formData.age) : null,
+      diagnosed_conditions: formData.diagnosed_conditions 
+        ? formData.diagnosed_conditions.split(',').map(s => s.trim()).filter(s => s)
+        : [],
+      current_medications: formData.current_medications
+        ? formData.current_medications.split(',').map(s => s.trim()).filter(s => s)
+        : []
     };
     
-    const { error } = await supabase
+    // Insert patient and get the ID back
+    const { data: insertedPatient, error } = await supabase
       .from('patients')
-      .insert([submitData] as any);
+      .insert([submitData] as any)
+      .select()
+      .single();
 
-    if (error) {
+    if (error || !insertedPatient) {
       console.error('Error adding patient:', error);
       alert('Error adding patient');
-    } else {
-      alert('Patient added successfully!');
-      onSuccess();
+      return;
     }
+
+    // Match trials using ClinicalTrials.gov API
+    try {
+      const matchResponse = await fetch('/api/match-trials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          condition: formData.condition_summary,
+          location: formData.location,
+          age: formData.age ? parseInt(formData.age) : null,
+          gender: formData.gender
+        }),
+      });
+
+      const matchData = await matchResponse.json();
+
+      if (matchData.success && matchData.nctIds.length > 0) {
+        // Update patient with matched trial NCT IDs
+        const updateResult: any = await (supabase as any)
+          .from('patients')
+          .update({ 
+            current_eligible_trials: matchData.nctIds 
+          })
+          .eq('patient_id', (insertedPatient as any).patient_id);
+
+        if (updateResult.error) {
+          console.error('Error updating patient with trials:', updateResult.error);
+        } else {
+          console.log(`✅ Found ${matchData.nctIds.length} eligible trials for patient`);
+        }
+      }
+    } catch (matchError) {
+      console.error('Error matching trials:', matchError);
+      // Don't fail the patient creation if trial matching fails
+    }
+
+    alert('Patient added successfully! Finding eligible trials...');
+    onSuccess();
   }
 
   return (
@@ -704,10 +751,10 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
           <Label htmlFor="diagnosed_conditions" className="text-base">Diagnosed Conditions</Label>
           <textarea
             id="diagnosed_conditions"
-            value={formData.diagnosed_conditions.join(', ')}
+            value={formData.diagnosed_conditions}
             onChange={(e) => setFormData({
               ...formData, 
-              diagnosed_conditions: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+              diagnosed_conditions: e.target.value
             })}
             placeholder="e.g., NSCLC, Hypertension, Diabetes Type 2 (comma-separated)"
             className="mt-2 w-full min-h-[80px] rounded-md border border-input bg-muted px-3 py-2 text-sm text-foreground resize-y"
@@ -719,10 +766,10 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
           <Label htmlFor="current_medications" className="text-base">Current Medications</Label>
           <textarea
             id="current_medications"
-            value={formData.current_medications.join(', ')}
+            value={formData.current_medications}
             onChange={(e) => setFormData({
               ...formData, 
-              current_medications: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+              current_medications: e.target.value
             })}
             placeholder="e.g., Pembrolizumab, Lisinopril, Metformin (comma-separated)"
             className="mt-2 w-full min-h-[80px] rounded-md border border-input bg-muted px-3 py-2 text-sm text-foreground resize-y"
