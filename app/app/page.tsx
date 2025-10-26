@@ -46,8 +46,12 @@ export default function DashboardPage() {
   const [selectedTrial, setSelectedTrial] = useState<Trial | null>(null);
   const [isViewPatientOpen, setIsViewPatientOpen] = useState(false);
   const [isViewTrialOpen, setIsViewTrialOpen] = useState(false);
+  const [isMatching, setIsMatching] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [matchingMessage, setMatchingMessage] = useState("");
 
   const supabase = createClient();
+  const API_BASE_URL = "http://localhost:8000";
 
   useEffect(() => {
     fetchData();
@@ -84,6 +88,107 @@ export default function DashboardPage() {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Sync trials from ClinicalTrials.gov
+  async function syncTrials() {
+    try {
+      setIsSyncing(true);
+      setMatchingMessage("Syncing trials from ClinicalTrials.gov...");
+
+      const response = await fetch(`${API_BASE_URL}/trials/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          condition: null, // Sync all conditions
+          phase: null,
+          max_results: 50
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to sync trials');
+      }
+
+      const data = await response.json();
+      setMatchingMessage(`Successfully synced ${data.synced_count} trials!`);
+      
+      // Refresh trials list
+      await fetchData();
+      
+      setTimeout(() => setMatchingMessage(""), 3000);
+    } catch (error) {
+      console.error('Error syncing trials:', error);
+      setMatchingMessage("Error syncing trials. Make sure the backend is running.");
+      setTimeout(() => setMatchingMessage(""), 5000);
+    } finally {
+      setIsSyncing(false);
+    }
+  }
+
+  // Match all patients with all trials
+  async function matchAll() {
+    try {
+      setIsMatching(true);
+      setMatchingMessage("Matching all patients with trials...");
+
+      const response = await fetch(`${API_BASE_URL}/match/all`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to match patients');
+      }
+
+      const data = await response.json();
+      setMatchingMessage(
+        `Matched ${data.patients_processed} patients with ${data.trials_processed} trials. ` +
+        `Found ${data.total_matches} eligible matches!`
+      );
+      
+      // Refresh data to show updated eligibility
+      await fetchData();
+      
+      setTimeout(() => setMatchingMessage(""), 5000);
+    } catch (error) {
+      console.error('Error matching:', error);
+      setMatchingMessage("Error matching. Make sure the backend is running at http://localhost:8000");
+      setTimeout(() => setMatchingMessage(""), 5000);
+    } finally {
+      setIsMatching(false);
+    }
+  }
+
+  // Match a specific patient
+  async function matchPatient(patientId: string) {
+    try {
+      setIsMatching(true);
+      setMatchingMessage("Finding eligible trials for patient...");
+
+      const response = await fetch(`${API_BASE_URL}/match/patient/${patientId}`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to match patient');
+      }
+
+      const data = await response.json();
+      setMatchingMessage(
+        `Found ${data.current_eligible_count} current and ${data.future_eligible_count} future eligible trials!`
+      );
+      
+      // Refresh data
+      await fetchData();
+      
+      setTimeout(() => setMatchingMessage(""), 4000);
+    } catch (error) {
+      console.error('Error matching patient:', error);
+      setMatchingMessage("Error matching patient. Make sure the backend is running.");
+      setTimeout(() => setMatchingMessage(""), 5000);
+    } finally {
+      setIsMatching(false);
     }
   }
 
@@ -140,7 +245,23 @@ export default function DashboardPage() {
               Clinical Recruitment Platform
             </p>
           </div>
-          <div className="flex items-center gap-4 fade-in delay-1">
+          <div className="flex items-center gap-3 fade-in delay-1">
+            <Button 
+              onClick={syncTrials} 
+              disabled={isSyncing}
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-sm px-4 py-5"
+            >
+              {isSyncing ? "Syncing..." : "Sync Trials"}
+            </Button>
+
+            <Button 
+              onClick={matchAll} 
+              disabled={isMatching || patients.length === 0 || trials.length === 0}
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-sm px-4 py-5"
+            >
+              {isMatching ? "Matching..." : "Match All"}
+            </Button>
+
             <Dialog open={isPatientDialogOpen} onOpenChange={setIsPatientDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-6 py-5">
@@ -183,6 +304,15 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Status Message Banner */}
+      {matchingMessage && (
+        <div className="max-w-7xl mx-auto px-8 pt-6">
+          <div className="bg-accent/20 border border-accent text-accent-foreground px-6 py-4 rounded-lg text-center text-base font-medium">
+            {matchingMessage}
+          </div>
+        </div>
+      )}
 
       {/* Stats Overview */}
       <section className="max-w-7xl mx-auto px-8 py-8">
@@ -293,17 +423,28 @@ export default function DashboardPage() {
                           {new Date(patient.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-sm"
-                            onClick={() => {
-                              setSelectedPatient(patient);
-                              setIsViewPatientOpen(true);
-                            }}
-                          >
-                            View
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-sm"
+                              onClick={() => {
+                                setSelectedPatient(patient);
+                                setIsViewPatientOpen(true);
+                              }}
+                            >
+                              View
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-sm bg-accent/10 hover:bg-accent/20"
+                              onClick={() => matchPatient(patient.patient_id)}
+                              disabled={isMatching}
+                            >
+                              Match
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
