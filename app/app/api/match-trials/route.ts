@@ -1,3 +1,6 @@
+// this API route is used to match trials to a patient based on their criteria, using the web page.  
+// This would be done manually by the recruiter 
+
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {

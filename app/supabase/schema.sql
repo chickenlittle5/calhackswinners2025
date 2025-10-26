@@ -24,25 +24,8 @@ CREATE TABLE patients (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Create trials table
-CREATE TABLE trials (
-    trial_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    title TEXT NOT NULL,
-    phase TEXT,
-    condition TEXT,
-    location TEXT,
-    start_date DATE,
-    end_date DATE,
-    eligible_patients JSONB DEFAULT '[]'::jsonb,
-    future_eligible_patients JSONB DEFAULT '[]'::jsonb,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 -- Create indexes for better performance
 CREATE INDEX idx_patients_condition ON patients(condition_summary);
-CREATE INDEX idx_trials_condition ON trials(condition);
-CREATE INDEX idx_trials_phase ON trials(phase);
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -57,17 +40,10 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_patients_updated_at BEFORE UPDATE ON patients
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_trials_updated_at BEFORE UPDATE ON trials
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- Row Level Security (RLS)
 ALTER TABLE patients ENABLE ROW LEVEL SECURITY;
-ALTER TABLE trials ENABLE ROW LEVEL SECURITY;
 
 -- Create policies (adjust based on your auth requirements)
 -- For now, allowing all operations for development
 CREATE POLICY "Allow all operations on patients" ON patients
-    FOR ALL USING (true);
-
-CREATE POLICY "Allow all operations on trials" ON trials
     FOR ALL USING (true);

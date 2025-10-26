@@ -4,9 +4,9 @@ A modern Next.js application for managing clinical trial recruitment, built with
 
 ## Features
 
-- 📊 **Dashboard Overview**: Real-time stats for patients and trials
+- 📊 **Dashboard Overview**: Real-time patient statistics
 - 👥 **Patient Management**: Add, search, and manage patient records
-- 🔬 **Trial Management**: Track clinical trials with enrollment status
+- 🔬 **Trial Matching**: Automatic matching with ClinicalTrials.gov API
 - 🎨 **Beautiful UI**: Dark theme with neon aesthetics and custom animations
 - 📱 **Responsive Design**: Works on all device sizes
 - 🔐 **Secure Database**: Supabase backend with Row Level Security
@@ -73,22 +73,16 @@ app/
 
 ## Database Schema
 
-The application uses two main tables:
+The application uses a single main table:
 
 ### Patients Table
 
 - Patient demographics (name, age, date of birth, gender)
 - Contact information (email, phone)
 - Location and medical history
-- Diagnosed conditions and current medications
-- Trial eligibility tracking (JSONB fields)
-
-### Trials Table
-
-- Trial information (title, phase, condition)
-- Study location and timeline (start/end dates)
-- Sponsor information
-- Eligible patient tracking (JSONB fields)
+- Diagnosed conditions and current medications (JSONB arrays)
+- Trial eligibility tracking (`current_eligible_trials`, `future_eligible_trials` as JSONB arrays of NCT IDs)
+- Automatically matched with ClinicalTrials.gov API on patient creation
 
 ## Key Features Implementation
 

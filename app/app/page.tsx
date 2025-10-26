@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,20 +31,15 @@ import {
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import type { Patient, Trial } from "@/types/database";
+import type { Patient } from "@/types/database";
 
 export default function DashboardPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [trials, setTrials] = useState<Trial[]>([]);
   const [loading, setLoading] = useState(true);
   const [patientSearch, setPatientSearch] = useState("");
-  const [trialSearch, setTrialSearch] = useState("");
   const [isPatientDialogOpen, setIsPatientDialogOpen] = useState(false);
-  const [isTrialDialogOpen, setIsTrialDialogOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const [selectedTrial, setSelectedTrial] = useState<Trial | null>(null);
   const [isViewPatientOpen, setIsViewPatientOpen] = useState(false);
-  const [isViewTrialOpen, setIsViewTrialOpen] = useState(false);
 
   const supabase = createClient();
 
@@ -68,18 +62,6 @@ export default function DashboardPage() {
       } else {
         setPatients(patientsData || []);
       }
-
-      // Fetch trials
-      const { data: trialsData, error: trialsError } = await supabase
-        .from('trials')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (trialsError) {
-        console.error('Error fetching trials:', trialsError);
-      } else {
-        setTrials(trialsData || []);
-      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -98,21 +80,9 @@ export default function DashboardPage() {
     );
   });
 
-  // Filter trials based on search
-  const filteredTrials = trials.filter(trial => {
-    const searchLower = trialSearch.toLowerCase();
-    return (
-      trial.trial_id.toLowerCase().includes(searchLower) ||
-      trial.title.toLowerCase().includes(searchLower) ||
-      (trial.condition && trial.condition.toLowerCase().includes(searchLower)) ||
-      (trial.location && trial.location.toLowerCase().includes(searchLower))
-    );
-  });
-
   // Calculate stats
   const stats = {
     totalPatients: patients.length,
-    activeTrials: trials.length,
   };
 
   const getStatusBadgeClass = (status: string) => {
@@ -160,26 +130,6 @@ export default function DashboardPage() {
                 }} />
               </DialogContent>
             </Dialog>
-
-            <Dialog open={isTrialDialogOpen} onOpenChange={setIsTrialDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5">
-                  <Plus className="mr-2 h-4 w-4" /> Add Trial
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-card border-border max-w-4xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader className="mb-6">
-                  <DialogTitle className="text-2xl">Add New Clinical Trial</DialogTitle>
-                  <DialogDescription className="text-base">
-                    Enter trial information to add it to the system.
-                  </DialogDescription>
-                </DialogHeader>
-                <TrialForm onSuccess={() => {
-                  setIsTrialDialogOpen(false);
-                  fetchData();
-                }} />
-              </DialogContent>
-            </Dialog>
           </div>
         </div>
       </header>
@@ -197,39 +147,13 @@ export default function DashboardPage() {
               <div className="text-4xl font-bold">{stats.totalPatients}</div>
             </CardContent>
           </Card>
-
-          <Card className="stat-card relative overflow-hidden slide-up delay-3">
-            <CardHeader className="pb-3">
-              <CardDescription className="text-sm uppercase tracking-wider font-semibold">
-                Prospective Trials
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold">{stats.activeTrials}</div>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
       {/* Main Content */}
       <section className="max-w-7xl mx-auto px-8 pb-16">
-        <Tabs defaultValue="patients" className="slide-up delay-3">
-          <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0">
-            <TabsTrigger 
-              value="patients" 
-              className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-8 py-4 text-base"
-            >
-              PATIENTS
-            </TabsTrigger>
-            <TabsTrigger 
-              value="trials"
-              className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-8 py-4 text-base"
-            >
-              CLINICAL TRIALS
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="patients" className="mt-6">
+        <div className="slide-up delay-3">
+          <div className="mt-6">
             <div className="flex justify-between items-center mb-6">
               <Input
                 type="search"
@@ -300,79 +224,8 @@ export default function DashboardPage() {
                 </TableBody>
               </Table>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="trials" className="mt-6">
-            <div className="flex justify-between items-center mb-6">
-              <Input
-                type="search"
-                placeholder="Search trials by name, phase, sponsor..."
-                className="w-[300px]"
-                value={trialSearch}
-                onChange={(e) => setTrialSearch(e.target.value)}
-              />
-            </div>
-
-            <Card className="overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-card">
-                    <TableHead className="text-sm font-semibold">Trial ID</TableHead>
-                    <TableHead className="text-sm font-semibold">Study Name</TableHead>
-                    <TableHead className="text-sm font-semibold">Phase</TableHead>
-                    <TableHead className="text-sm font-semibold">Condition</TableHead>
-                    <TableHead className="text-sm font-semibold">Location</TableHead>
-                    <TableHead className="text-sm font-semibold">Start Date</TableHead>
-                    <TableHead className="text-sm font-semibold">End Date</TableHead>
-                    <TableHead className="text-sm font-semibold">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={8} className="text-center py-8 text-base">Loading...</TableCell>
-                    </TableRow>
-                  ) : filteredTrials.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={8} className="text-center py-8 text-base">No trials found</TableCell>
-                    </TableRow>
-                  ) : (
-                    filteredTrials.map((trial) => (
-                      <TableRow key={trial.trial_id} className="hover:bg-muted/50">
-                        <TableCell className="font-mono text-sm">
-                          {trial.trial_id.slice(0, 8)}...
-                        </TableCell>
-                        <TableCell className="font-medium text-base max-w-md">{trial.title}</TableCell>
-                        <TableCell className="text-base">{trial.phase ? `Phase ${trial.phase}` : '-'}</TableCell>
-                        <TableCell className="text-base">{trial.condition || '-'}</TableCell>
-                        <TableCell className="text-base">{trial.location || '-'}</TableCell>
-                        <TableCell className="text-base">
-                          {trial.start_date ? new Date(trial.start_date).toLocaleDateString() : '-'}
-                        </TableCell>
-                        <TableCell className="text-base">
-                          {trial.end_date ? new Date(trial.end_date).toLocaleDateString() : '-'}
-                        </TableCell>
-                        <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-xs"
-                            onClick={() => {
-                              setSelectedTrial(trial);
-                              setIsViewTrialOpen(true);
-                            }}
-                          >
-                            View
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </section>
 
       {/* View Patient Dialog */}
@@ -455,6 +308,56 @@ export default function DashboardPage() {
                 )}
               </div>
 
+              {/* Eligible Clinical Trials Section */}
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold border-b border-border pb-2">Eligible Clinical Trials</h3>
+                {selectedPatient.current_eligible_trials && Array.isArray(selectedPatient.current_eligible_trials) && selectedPatient.current_eligible_trials.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Found {selectedPatient.current_eligible_trials.length} matching trial{selectedPatient.current_eligible_trials.length > 1 ? 's' : ''}
+                    </p>
+                    <div className="space-y-3">
+                      {(selectedPatient.current_eligible_trials as string[]).map((nctId, i) => (
+                        <div key={i} className="bg-muted/50 border border-border rounded-lg p-4 hover:border-primary/50 transition-colors">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-primary font-mono font-bold text-sm">{nctId}</span>
+                                <Badge variant="secondary" className="text-xs">Recruiting</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground">
+                                Click the link below to view full trial details on ClinicalTrials.gov
+          </p>
+        </div>
+          <a
+                              href={`https://clinicaltrials.gov/study/${nctId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-md text-sm font-medium transition-colors whitespace-nowrap"
+                            >
+                              View Details
+                              <svg 
+                                className="w-4 h-4" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+          </a>
+        </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-muted/30 border border-dashed border-border rounded-lg p-6 text-center">
+                    <p className="text-muted-foreground">No eligible trials found yet</p>
+                    <p className="text-xs text-muted-foreground mt-1">Trials will appear here after matching</p>
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold border-b border-border pb-2">System Information</h3>
                 <div className="grid grid-cols-2 gap-4">
@@ -473,71 +376,6 @@ export default function DashboardPage() {
         </DialogContent>
       </Dialog>
 
-      {/* View Trial Dialog */}
-      <Dialog open={isViewTrialOpen} onOpenChange={setIsViewTrialOpen}>
-        <DialogContent className="bg-card border-border max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="mb-4">
-            <DialogTitle className="text-2xl">Trial Details</DialogTitle>
-          </DialogHeader>
-          {selectedTrial && (
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold border-b border-border pb-2">Trial Information</h3>
-                <div>
-                  <p className="text-sm text-muted-foreground">Trial ID</p>
-                  <p className="font-mono text-sm">{selectedTrial.trial_id}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Study Name</p>
-                  <p className="font-medium text-lg">{selectedTrial.title}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Phase</p>
-                    <p>{selectedTrial.phase ? `Phase ${selectedTrial.phase}` : '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Condition</p>
-                    <p>{selectedTrial.condition || '-'}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold border-b border-border pb-2">Location & Timeline</h3>
-                <div>
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <p>{selectedTrial.location || '-'}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Start Date</p>
-                    <p>{selectedTrial.start_date ? new Date(selectedTrial.start_date).toLocaleDateString() : '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">End Date</p>
-                    <p>{selectedTrial.end_date ? new Date(selectedTrial.end_date).toLocaleDateString() : '-'}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold border-b border-border pb-2">System Information</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Created</p>
-                    <p className="text-sm">{new Date(selectedTrial.created_at).toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Last Updated</p>
-                    <p className="text-sm">{new Date(selectedTrial.updated_at).toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
@@ -780,127 +618,6 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Button type="submit" className="w-full bg-primary text-primary-foreground h-12 text-base mt-6">
         Add Patient
-      </Button>
-    </form>
-  );
-}
-
-// Trial Form Component
-function TrialForm({ onSuccess }: { onSuccess: () => void }) {
-  const [formData, setFormData] = useState({
-    title: '',
-    phase: '',
-    condition: '',
-    location: '',
-    start_date: '',
-    end_date: ''
-  });
-
-  const supabase = createClient();
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    
-    const { error } = await supabase
-      .from('trials')
-      .insert([formData] as any);
-
-    if (error) {
-      console.error('Error adding trial:', error);
-      alert('Error adding trial');
-    } else {
-      alert('Clinical trial added successfully!');
-      onSuccess();
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">Trial Information</h3>
-        
-        <div>
-          <Label htmlFor="title" className="text-base">Study Name *</Label>
-          <Input
-            id="title"
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
-            required
-            placeholder="e.g., A Phase III Study of Novel Treatment for NSCLC"
-            className="mt-2 h-11"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <Label htmlFor="phase" className="text-base">Phase</Label>
-            <Select value={formData.phase} onValueChange={(value) => setFormData({...formData, phase: value})}>
-              <SelectTrigger className="mt-2 h-11">
-                <SelectValue placeholder="Select phase" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="I">Phase I</SelectItem>
-                <SelectItem value="II">Phase II</SelectItem>
-                <SelectItem value="III">Phase III</SelectItem>
-                <SelectItem value="IV">Phase IV</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="condition" className="text-base">Condition/Disease *</Label>
-            <Input
-              id="condition"
-              value={formData.condition}
-              onChange={(e) => setFormData({...formData, condition: e.target.value})}
-              required
-              placeholder="e.g., Non-Small Cell Lung Cancer"
-              className="mt-2 h-11"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">Location & Timeline</h3>
-        
-        <div>
-          <Label htmlFor="location" className="text-base">Location *</Label>
-          <Input
-            id="location"
-            value={formData.location}
-            onChange={(e) => setFormData({...formData, location: e.target.value})}
-            required
-            placeholder="e.g., Stanford Medical Center, CA"
-            className="mt-2 h-11"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <Label htmlFor="start_date" className="text-base">Start Date</Label>
-            <Input
-              id="start_date"
-              type="date"
-              value={formData.start_date}
-              onChange={(e) => setFormData({...formData, start_date: e.target.value})}
-              className="mt-2 h-11"
-            />
-          </div>
-          <div>
-            <Label htmlFor="end_date" className="text-base">End Date</Label>
-            <Input
-              id="end_date"
-              type="date"
-              value={formData.end_date}
-              onChange={(e) => setFormData({...formData, end_date: e.target.value})}
-              className="mt-2 h-11"
-            />
-          </div>
-        </div>
-      </div>
-
-      <Button type="submit" className="w-full bg-primary text-primary-foreground h-12 text-base mt-6">
-        Add Clinical Trial
       </Button>
     </form>
   );
