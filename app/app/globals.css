@@ -162,6 +162,12 @@ button:not(:disabled):hover {
   box-shadow: 0 4px 12px rgba(0, 255, 159, 0.2);
 }
 
+/* Button active/pressed state */
+button:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 255, 159, 0.15);
+}
+
 /* Primary button styling */
 button[class*="bg-primary"] {
   background: var(--accent-primary);
@@ -263,9 +269,51 @@ tbody tr:hover {
   transition: all 0.3s ease;
 }
 
-/* Modal content styling */
+/* Modal content styling with animations */
 [role="dialog"] {
   border-radius: 12px !important;
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal overlay fade in */
+[data-slot="dialog-overlay"] {
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Add smooth exit animation */
+[data-state="closed"] [role="dialog"] {
+  animation: modalSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
 }
 
 /* Label styling from HTML */
@@ -277,4 +325,27 @@ label {
   font-weight: 600;
   margin-bottom: 8px;
   display: block;
+}
+
+/* Stagger form elements animation */
+[role="dialog"] .space-y-4 > * {
+  animation: formElementFadeIn 0.4s ease-out backwards;
+}
+
+[role="dialog"] .space-y-4 > *:nth-child(1) { animation-delay: 0.05s; }
+[role="dialog"] .space-y-4 > *:nth-child(2) { animation-delay: 0.1s; }
+[role="dialog"] .space-y-4 > *:nth-child(3) { animation-delay: 0.15s; }
+[role="dialog"] .space-y-4 > *:nth-child(4) { animation-delay: 0.2s; }
+[role="dialog"] .space-y-4 > *:nth-child(5) { animation-delay: 0.25s; }
+[role="dialog"] .space-y-4 > *:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes formElementFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
