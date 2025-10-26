@@ -132,7 +132,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b bg-card sticky top-0 z-50">
+      <header className="border-b bg-card sticky top-0 z-50 backdrop-blur-sm" style={{ backgroundColor: 'hsl(var(--card))' }}>
         <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
           <div className="fade-in">
             <h1 className="text-4xl glow-text mb-1">TrialSync</h1>
