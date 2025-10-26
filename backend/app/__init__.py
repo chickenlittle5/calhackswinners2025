@@ -1,2 +1,0 @@
-"""TrialSync Backend API."""
-
