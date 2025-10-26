@@ -18,8 +18,8 @@ contact_email	TEXT (nullable / encrypted)	Stored separately with restricted acce
 phone_number	TEXT (nullable / encrypted)	Stored separately with restricted access
 location	TEXT	City/State/Country
 condition_summary	TEXT	Extracted from voice transcript
-current_eligibility	ENUM("eligible", "maybe", "ineligible", "pending")	Status for currently matched trials
-future_eligibility	JSONB	Example: [{"trial_id": "...", "expected_date": "YYYY-MM-DD"}]
+current_eligibile_trials
+future_eligibile_trials	JSONB	Example: [{"trial_id": "...", "expected_date": "YYYY-MM-DD"}]
 created_at	TIMESTAMP	
 updated_at	TIMESTAMP	
 --
