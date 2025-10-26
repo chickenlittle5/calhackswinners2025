@@ -188,7 +188,8 @@ class TranscriptManager:
             patient_id = saved_record.get("patient_id")
             logger.info(f"Successfully saved patient data to Supabase with ID: {patient_id}")
 
-            # Step 3: Match patient to clinical trials
+            # Step 3: Match patient to clinical trials (current conditions)
+            nct_ids = []
             try:
                 from clinical_trials_matcher import match_patient_to_trials
 
@@ -210,12 +211,41 @@ class TranscriptManager:
                 # Don't fail the whole operation if trial matching fails
                 logger.warning("Continuing despite trial matching error")
 
+            # Step 4: Match patient to future trials (predicted conditions)
+            future_results = {}
+            try:
+                from future_trials_matcher import match_patient_to_future_trials
+
+                logger.info("Starting future trial matching with AI predictions...")
+                future_results = match_patient_to_future_trials(patient_data)
+
+                predicted_conditions = future_results.get("predicted_conditions", [])
+                future_nct_ids = future_results.get("trial_nct_ids", [])
+
+                if predicted_conditions and future_nct_ids:
+                    # Update patient record with future trials
+                    updated_record = db.update_future_trials(patient_id, predicted_conditions, future_nct_ids)
+                    if updated_record:
+                        logger.info(f"✅ Predicted {len(predicted_conditions)} future conditions, matched {len(future_nct_ids)} trials")
+                    else:
+                        logger.warning(f"Future trial matching completed but failed to update database")
+                elif predicted_conditions:
+                    logger.info(f"Predicted {len(predicted_conditions)} future conditions but no trials found")
+                else:
+                    logger.info("No future conditions predicted")
+
+            except Exception as e:
+                logger.error(f"Error during future trial matching: {e}", exc_info=True)
+                # Don't fail the whole operation if future trial matching fails
+                logger.warning("Continuing despite future trial matching error")
+
             return {
                 "success": True,
                 "patient_id": patient_id,
                 "patient_data": patient_data,
                 "database_record": saved_record,
-                "matched_trials": nct_ids if 'nct_ids' in locals() else []
+                "matched_trials": nct_ids,
+                "future_trials_results": future_results
             }
 
         except Exception as e:

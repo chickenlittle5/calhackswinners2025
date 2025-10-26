@@ -270,6 +270,42 @@ class SupabasePatientDB:
             logger.error(f"Error updating eligible trials for patient {patient_id}: {e}", exc_info=True)
             return None
 
+    def update_future_trials(
+        self,
+        patient_id: str,
+        predicted_conditions: List[str],
+        nct_ids: List[str]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Update the future trials data for a patient (predicted conditions and matching trials).
+
+        Args:
+            patient_id: UUID of the patient to update
+            predicted_conditions: List of predicted future conditions
+            nct_ids: List of NCT IDs for future trials
+
+        Returns:
+            Updated patient record, or None if update fails
+        """
+        try:
+            update_data = {
+                "future_eligible_trials": nct_ids,
+                "updated_at": datetime.now().isoformat()
+            }
+
+            result = self.client.table(self.table_name).update(update_data).eq("patient_id", patient_id).execute()
+
+            if result.data:
+                logger.info(f"Updated future trials for patient {patient_id}: {len(predicted_conditions)} conditions, {len(nct_ids)} trials")
+                return result.data[0]
+            else:
+                logger.error(f"Failed to update future trials for patient {patient_id}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Error updating future trials for patient {patient_id}: {e}", exc_info=True)
+            return None
+
     def _prepare_patient_data(self, patient_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Prepare patient data for database insertion/update.
