@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "room_name": "call-_+16692553984_kVUwdrgPstxR",
+    "session_start": "2025-10-26T04:01:43.741200"
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T04:01:46.987515"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! This",
+      "timestamp": "2025-10-26T04:01:50.626354"
+    },
+    {
+      "role": "user",
+      "content": "Yes I can hear you.",
+      "timestamp": "2025-10-26T04:01:50.810580"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you! Before we",
+      "timestamp": "2025-10-26T04:01:54.357945"
+    },
+    {
+      "role": "user",
+      "content": "Yes I can hear you.",
+      "timestamp": "2025-10-26T04:01:54.586242"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for confirming. May I kindly ask for your consent to record this conversation? Please respond with a clear \"yes\" or \"no.\"",
+      "timestamp": "2025-10-26T04:02:03.912951"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:02:07.432474"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please tell me your first name?",
+      "timestamp": "2025-10-26T04:02:11.602799"
+    },
+    {
+      "role": "user",
+      "content": "Erin",
+      "timestamp": "2025-10-26T04:02:19.445373"
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks, Erin. What is your last name?",
+      "timestamp": "2025-10-26T04:02:22.824458"
+    },
+    {
+      "role": "user",
+      "content": "Don",
+      "timestamp": "2025-10-26T04:02:28.158606"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Erin Don. What is your date of birth? Please provide it in the format month, day, and year.",
+      "timestamp": "2025-10-26T04:02:35.632726"
+    },
+    {
+      "role": "user",
+      "content": "Nie can I give you my last name again.",
+      "timestamp": "2025-10-26T04:02:40.517330"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, of course. Please tell me your last name again.",
+      "timestamp": "2025-10-26T04:02:43.920497"
+    },
+    {
+      "role": "user",
+      "content": "Donald",
+      "timestamp": "2025-10-26T04:02:48.772299"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for clarifying, Erin Donald. What is your date of birth? Please provide the month, day, and year.",
+      "timestamp": "2025-10-26T04:02:56.613466"
+    },
+    {
+      "role": "user",
+      "content": "July.",
+      "timestamp": "2025-10-26T04:03:04.889674"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you.",
+      "timestamp": "2025-10-26T04:03:06.101498"
+    },
+    {
+      "role": "user",
+      "content": "Twenty first twenty twenty five.",
+      "timestamp": "2025-10-26T04:03:06.269786"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for the information. Can you please tell me your gender?",
+      "timestamp": "2025-10-26T04:03:11.031151"
+    },
+    {
+      "role": "user",
+      "content": "I am emil",
+      "timestamp": "2025-10-26T04:03:17.394765"
+    },
+    {
+      "role": "assistant",
+      "content": "I apologize, I did not understand that. Could you please tell me your gender? For example, male, female, or other.",
+      "timestamp": "2025-10-26T04:03:26.960688"
+    },
+    {
+      "role": "user",
+      "content": "I make email.",
+      "timestamp": "2025-10-26T04:03:28.374836"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Before",
+      "timestamp": "2025-10-26T04:03:31.594721"
+    },
+    {
+      "role": "user",
+      "content": "I am a female.",
+      "timestamp": "2025-10-26T04:03:31.736388"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please tell me your age?",
+      "timestamp": "2025-10-26T04:03:35.716644"
+    },
+    {
+      "role": "user",
+      "content": "Three",
+      "timestamp": "2025-10-26T04:03:42.188493"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your contact email address?",
+      "timestamp": "2025-10-26T04:03:45.754608"
+    },
+    {
+      "role": "user",
+      "content": "Smith family at gmail dot com.",
+      "timestamp": "2025-10-26T04:03:54.700507"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please provide your phone number?",
+      "timestamp": "2025-10-26T04:03:57.782657"
+    },
+    {
+      "role": "user",
+      "content": "Six hundred sixty nine",
+      "timestamp": "2025-10-26T04:04:02.600492"
+    },
+    {
+      "role": "assistant",
+      "content": "Could you please provide your",
+      "timestamp": "2025-10-26T04:04:06.498739"
+    },
+    {
+      "role": "user",
+      "content": "Two hundred fifty five through ninety four",
+      "timestamp": "2025-10-26T04:04:06.654381"
+    },
+    {
+      "role": "assistant",
+      "content": "Could you",
+      "timestamp": "2025-10-26T04:04:10.267343"
+    },
+    {
+      "role": "user",
+      "content": "Six six nine two five three nine report",
+      "timestamp": "2025-10-26T04:04:10.387966"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please provide your full phone number including the area code?",
+      "timestamp": "2025-10-26T04:04:15.757450"
+    },
+    {
+      "role": "user",
+      "content": "Six six nine two five five three nine eight four.",
+      "timestamp": "2025-10-26T04:04:22.514719"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your current location or city?",
+      "timestamp": "2025-10-26T04:04:25.983095"
+    },
+    {
+      "role": "user",
+      "content": "San jose california.",
+      "timestamp": "2025-10-26T04:04:33.008431"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What medical conditions have you been diagnosed with currently?",
+      "timestamp": "2025-10-26T04:04:38.236473"
+    },
+    {
+      "role": "user",
+      "content": "Cancer.",
+      "timestamp": "2025-10-26T04:04:42.699258"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Are you currently taking any medications? If yes, please list them.",
+      "timestamp": "2025-10-26T04:04:49.382881"
+    },
+    {
+      "role": "user",
+      "content": "I'm currently taking advil",
+      "timestamp": "2025-10-26T04:04:55.300417"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please provide a brief summary of your current condition?",
+      "timestamp": "2025-10-26T04:05:01.320516"
+    },
+    {
+      "role": "user",
+      "content": "I have headaches and back pain.",
+      "timestamp": "2025-10-26T04:05:07.523937"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for sharing that. We have the information needed for now. If you are interested, I can check for clinical trials that may be suitable for you. Would you like me to do that?",
+      "timestamp": "2025-10-26T04:05:17.381395"
+    },
+    {
+      "role": "user",
+      "content": "Now.",
+      "timestamp": "2025-10-26T04:05:28.157993"
+    },
+    {
+      "role": "assistant",
+      "content": "I will look for clinical",
+      "timestamp": "2025-10-26T04:05:30.255467"
+    },
+    {
+      "role": "user",
+      "content": "Thank you.",
+      "timestamp": "2025-10-26T04:05:30.488605"
+    },
+    {
+      "role": "assistant",
+      "content": "You’re welcome. If you have any more",
+      "timestamp": "2025-10-26T04:05:33.536608"
+    }
+  ],
+  "message_count": 50,
+  "exported_at": "2025-10-26T04:05:57.373540"
+}

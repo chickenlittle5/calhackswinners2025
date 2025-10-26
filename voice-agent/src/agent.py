@@ -1,5 +1,4 @@
 import logging
-import asyncio
 
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -30,8 +29,10 @@ class Assistant(Agent):
             instructions="""You are a helpful voice AI assistant. 
             The patient is interacting with you via voice, even if you perceive the conversation as text.
             Your purpose is to determine the eligbility of patients for clinical trials. 
-            You will ask questions to the user for the following information: First Name, Last Name, Date of Birth, Gender, Age, zContact Email, Phone Number, Location, and a summary of their current condition
+            You will ask questions to the user for the following information: First Name, Last Name, Date of Birth, Gender, Age, Contact Email, Phone Number, Location, currently diagnosed conditions, current medications, and a summary of their current condition
             Ask questions for one field at a time. If the user's response is incomprehensible or doesn't make sense for the question (e.g. "I'm Asian" for "What is your name?" or a 20 digit phone number or an email without a domain), then repeat the question again until you receive a reasonable response.
+            For emails, assume "at" is equivalent to "@".
+            After this, please repeat what you think they said and have them confirm.
             However, be patient towards patients and don't rush or be rude towards them.
             Your responses are concise, to the point, and without any complex formatting or punctuation including emojis, asterisks, or other symbols.
             You are friendly but to the point.""",
@@ -43,7 +44,7 @@ class Assistant(Agent):
         else:
             await self.session.generate_reply(instructions="Inform the user that you are unable to proceed and will end the call.")
             # Wait for the goodbye message to finish playing before disconnecting
-            await asyncio.sleep(3)
+            # await asyncio.sleep(3)
             job_ctx = get_job_context()
             # Disconnect from the room to end the call
             await job_ctx.room.disconnect()
@@ -159,8 +160,23 @@ async def entrypoint(ctx: JobContext):
 
     # Save conversation transcript when session ends
     async def save_transcript():
+        # Step 1: Save transcript to JSON file
         filepath = transcript_mgr.save_to_file()
         logger.info(f"Transcript saved to {filepath} with {len(transcript_mgr.transcript)} messages")
+
+        # Step 2: Parse transcript and save to Supabase database
+        try:
+            logger.info("Starting transcript parsing and database save...")
+            result = transcript_mgr.parse_and_save_to_db(filepath)
+
+            if result and result.get("success"):
+                patient_id = result.get("patient_id")
+                logger.info(f"✅ Successfully parsed and saved patient data. Patient ID: {patient_id}")
+            else:
+                error = result.get("error", "Unknown error") if result else "No result returned"
+                logger.error(f"❌ Failed to parse and save: {error}")
+        except Exception as e:
+            logger.error(f"❌ Error during parse_and_save_to_db: {e}", exc_info=True)
 
     ctx.add_shutdown_callback(log_usage)
     ctx.add_shutdown_callback(save_transcript)
@@ -197,6 +213,7 @@ class CollectConsent(AgentTask[bool]):
         )
 
     async def on_enter(self) -> None:
+        await self.session.say("Hello! Can you hear me?")
         await self.session.generate_reply(
             instructions="""
             Briefly introduce yourself, then ask for permission to record the call for quality assurance and training purposes.
@@ -215,4 +232,4 @@ class CollectConsent(AgentTask[bool]):
         self.complete(False)
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, prewarm_fnc=prewarm))
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="my-telephony-agent", prewarm_fnc=prewarm))

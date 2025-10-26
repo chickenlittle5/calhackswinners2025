@@ -1,7 +1,8 @@
 import logging
 import json
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+from pathlib import Path
 
 logger = logging.getLogger("transcribe")
 
@@ -60,15 +61,23 @@ class TranscriptManager:
 
     def save_to_file(self, filepath: str = None):
         """
-        Save the transcript to a JSON file.
+        Save the transcript to a JSON file in the transcripts folder.
 
         Args:
-            filepath: Path to save the file. If None, generates a timestamped filename.
+            filepath: Path to save the file. If None, generates a timestamped filename in transcripts/.
         """
+        # Create transcripts directory if it doesn't exist
+        transcripts_dir = Path("transcripts")
+        transcripts_dir.mkdir(exist_ok=True)
+
         if filepath is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             room = self.metadata.get("room_name", "unknown")
-            filepath = f"./transcripts/transcript_{room}_{timestamp}.json"
+            filename = f"transcript_{room}_{timestamp}.json"
+            filepath = transcripts_dir / filename
+        else:
+            # If custom filepath provided, still put it in transcripts folder
+            filepath = transcripts_dir / Path(filepath).name
 
         data = self.get_full_data()
 
@@ -76,7 +85,7 @@ class TranscriptManager:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Transcript saved to {filepath}")
-        return filepath
+        return str(filepath)
 
     def load_from_session_history(self, session_history):
         """
@@ -138,6 +147,81 @@ class TranscriptManager:
     def extract_agent_responses(self) -> List[str]:
         """Extract only agent/assistant messages from the transcript."""
         return [msg['content'] for msg in self.transcript if msg['role'] == 'assistant']
+
+    def parse_and_save_to_db(self, transcript_filepath: str) -> Optional[Dict[str, Any]]:
+        """
+        Parse the transcript using Claude and save extracted data to Supabase.
+
+        Args:
+            transcript_filepath: Path to the saved transcript JSON file
+
+        Returns:
+            Dictionary with parsing and saving results, or None if failed
+        """
+        try:
+            # Import parser and supabase client (lazy import to avoid circular dependencies)
+            from parser import TranscriptParser
+            from supabase_client import SupabasePatientDB
+
+            logger.info(f"Starting parse and save for: {transcript_filepath}")
+
+            # Step 1: Parse transcript with Claude
+            parser = TranscriptParser()
+            patient_data = parser.parse_transcript(transcript_filepath)
+
+            if not patient_data:
+                logger.error("Failed to parse transcript")
+                return {"success": False, "error": "Parsing failed", "patient_id": None}
+
+            logger.info(f"Successfully parsed transcript. Confidence: {patient_data.get('extraction_confidence', 'unknown')}")
+
+            # Step 2: Save to Supabase
+            db = SupabasePatientDB()
+            saved_record = db.upsert_patient(patient_data)
+
+            if not saved_record:
+                logger.error("Failed to save to Supabase")
+                # Save extracted data to backup file
+                self._save_backup(patient_data, transcript_filepath)
+                return {"success": False, "error": "Database save failed", "patient_data": patient_data}
+
+            patient_id = saved_record.get("id")
+            logger.info(f"Successfully saved patient data to Supabase with ID: {patient_id}")
+
+            return {
+                "success": True,
+                "patient_id": patient_id,
+                "patient_data": patient_data,
+                "database_record": saved_record
+            }
+
+        except Exception as e:
+            logger.error(f"Error in parse_and_save_to_db: {e}", exc_info=True)
+            return {"success": False, "error": str(e), "patient_id": None}
+
+    def _save_backup(self, patient_data: Dict[str, Any], transcript_path: str):
+        """
+        Save extracted patient data as backup JSON if database save fails.
+
+        Args:
+            patient_data: Extracted patient information
+            transcript_path: Original transcript path
+        """
+        try:
+            backup_dir = Path("transcripts/parsed_backups")
+            backup_dir.mkdir(exist_ok=True)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            room = self.metadata.get("room_name", "unknown")
+            backup_file = backup_dir / f"parsed_{room}_{timestamp}.json"
+
+            with open(backup_file, 'w', encoding='utf-8') as f:
+                json.dump(patient_data, f, indent=2, ensure_ascii=False)
+
+            logger.info(f"Saved backup to {backup_file}")
+
+        except Exception as e:
+            logger.error(f"Failed to save backup: {e}")
 
 
 # Global transcript manager instance

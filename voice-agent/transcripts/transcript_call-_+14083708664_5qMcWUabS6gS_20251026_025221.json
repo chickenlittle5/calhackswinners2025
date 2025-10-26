@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "room_name": "call-_+14083708664_5qMcWUabS6gS",
+    "session_start": "2025-10-26T02:52:14.328852"
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T02:49:56.130062"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello, this is [Your Name] from [Your Company].",
+      "timestamp": "2025-10-26T02:50:02.198003"
+    },
+    {
+      "role": "user",
+      "content": "Oh sweet",
+      "timestamp": "2025-10-26T02:50:02.291192"
+    },
+    {
+      "role": "user",
+      "content": "Shit.",
+      "timestamp": "2025-10-26T02:50:02.539036"
+    },
+    {
+      "role": "user",
+      "content": "Wait you got someone calling",
+      "timestamp": "2025-10-26T02:50:04.698331"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T02:51:38.568208"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! This is [Your",
+      "timestamp": "2025-10-26T02:51:41.452426"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T02:51:41.614273"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T02:51:47.353313"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for confirming. Before we proceed, may I ask for your consent to record this conversation? Please respond with a",
+      "timestamp": "2025-10-26T02:51:51.357208"
+    },
+    {
+      "role": "user",
+      "content": "No.",
+      "timestamp": "2025-10-26T02:51:51.539348"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! This is [Your Name] from",
+      "timestamp": "2025-10-26T02:51:51.882613"
+    },
+    {
+      "role": "user",
+      "content": "Hello.",
+      "timestamp": "2025-10-26T02:51:51.906252"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for letting me know. Since",
+      "timestamp": "2025-10-26T02:51:56.240208"
+    },
+    {
+      "role": "user",
+      "content": "No",
+      "timestamp": "2025-10-26T02:51:56.416576"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! Before we continue, I would like to ask for your consent to record this conversation.",
+      "timestamp": "2025-10-26T02:51:57.925493"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T02:52:17.298233"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello, my",
+      "timestamp": "2025-10-26T02:52:19.575327"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T02:52:19.655569"
+    }
+  ],
+  "message_count": 19,
+  "exported_at": "2025-10-26T02:52:21.760987"
+}

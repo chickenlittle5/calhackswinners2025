@@ -1,0 +1,285 @@
+{
+  "metadata": {
+    "room_name": "call-_+16692553984_yTo2Qp5CpPj7",
+    "session_start": "2025-10-26T04:21:29.769684"
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T04:21:32.543336"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! This is [Your Name] from [Your Company]. Before we proceed, may I have your permission to record this call for quality assurance and training purposes? Of course, you're free to decline if you prefer. Could you please let me know",
+      "timestamp": "2025-10-26T04:21:47.633967"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:21:47.770011"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please tell me your first name?",
+      "timestamp": "2025-10-26T04:21:52.649682"
+    },
+    {
+      "role": "user",
+      "content": "My name is evan.",
+      "timestamp": "2025-10-26T04:21:57.103706"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Evan. Could you please tell me your last name?",
+      "timestamp": "2025-10-26T04:22:01.019787"
+    },
+    {
+      "role": "user",
+      "content": "Smith",
+      "timestamp": "2025-10-26T04:22:06.454905"
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks, Evan Smith. What is your date of birth? Please provide it in month-day-year format.",
+      "timestamp": "2025-10-26T04:22:12.666070"
+    },
+    {
+      "role": "user",
+      "content": "July twentieth two thousand five",
+      "timestamp": "2025-10-26T04:22:17.711484"
+    },
+    {
+      "role": "assistant",
+      "content": "Got it. Your date of birth is July 20, 2005. Is that correct?",
+      "timestamp": "2025-10-26T04:22:24.265287"
+    },
+    {
+      "role": "user",
+      "content": "That's correct.",
+      "timestamp": "2025-10-26T04:22:27.445809"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your gender?",
+      "timestamp": "2025-10-26T04:22:30.316913"
+    },
+    {
+      "role": "user",
+      "content": "Nil.",
+      "timestamp": "2025-10-26T04:22:34.993276"
+    },
+    {
+      "role": "assistant",
+      "content": "Could you please clarify your gender? For example, male, female, non-binary, or prefer not to say.",
+      "timestamp": "2025-10-26T04:22:46.401198"
+    },
+    {
+      "role": "user",
+      "content": "I have a nail.",
+      "timestamp": "2025-10-26T04:22:59.605026"
+    },
+    {
+      "role": "user",
+      "content": "I'm a male.",
+      "timestamp": "2025-10-26T04:23:03.110238"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for clarifying. You are male. Is that correct?",
+      "timestamp": "2025-10-26T04:23:07.962038"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:23:12.862146"
+    },
+    {
+      "role": "assistant",
+      "content": "Great. How old are you?",
+      "timestamp": "2025-10-26T04:23:15.462961"
+    },
+    {
+      "role": "user",
+      "content": "I'm twenty one years old.",
+      "timestamp": "2025-10-26T04:23:21.492010"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Can you please provide your contact email?",
+      "timestamp": "2025-10-26T04:23:25.667018"
+    },
+    {
+      "role": "user",
+      "content": "Seventeen you win at gmail dot com.",
+      "timestamp": "2025-10-26T04:23:32.687105"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Your email is seventeenyouwin@gmail.com. Is that correct?",
+      "timestamp": "2025-10-26T04:23:38.618944"
+    },
+    {
+      "role": "user",
+      "content": "No my email is evanuid at gmail com.",
+      "timestamp": "2025-10-26T04:23:44.788173"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Your email is evanuid@gmail.com. Is that correct?",
+      "timestamp": "2025-10-26T04:23:51.316246"
+    },
+    {
+      "role": "user",
+      "content": "Yes that's correct.",
+      "timestamp": "2025-10-26T04:23:53.922289"
+    },
+    {
+      "role": "assistant",
+      "content": "Great. Could you please provide your phone number?",
+      "timestamp": "2025-10-26T04:23:57.629472"
+    },
+    {
+      "role": "user",
+      "content": "Phone number is six six nine two profile ninety four",
+      "timestamp": "2025-10-26T04:24:04.317865"
+    },
+    {
+      "role": "assistant",
+      "content": "I’m sorry, I didn’t catch that clearly. Could you please say your phone number again?",
+      "timestamp": "2025-10-26T04:24:10.156821"
+    },
+    {
+      "role": "user",
+      "content": "My phone number is six six nine two five.",
+      "timestamp": "2025-10-26T04:24:15.896151"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank",
+      "timestamp": "2025-10-26T04:24:16.236832"
+    },
+    {
+      "role": "user",
+      "content": "Three nine eight four",
+      "timestamp": "2025-10-26T04:24:16.256764"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Just to confirm, your phone number is 669-253-984. Is that correct?",
+      "timestamp": "2025-10-26T04:24:23.951126"
+    },
+    {
+      "role": "user",
+      "content": "No my phone number is six six nine two five five Three nine eight four",
+      "timestamp": "2025-10-26T04:24:30.783290"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Your phone number is 669-255-3984. Is that correct?",
+      "timestamp": "2025-10-26T04:24:39.447186"
+    },
+    {
+      "role": "user",
+      "content": "That's Correct.",
+      "timestamp": "2025-10-26T04:24:41.747138"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Can you please tell me your location, including city and state?",
+      "timestamp": "2025-10-26T04:24:47.115102"
+    },
+    {
+      "role": "user",
+      "content": "San jose california.",
+      "timestamp": "2025-10-26T04:24:50.588278"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Your location is San Jose, California. Is that correct?",
+      "timestamp": "2025-10-26T04:24:56.782376"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:24:58.976188"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Do you currently have any diagnosed medical conditions? If yes, please list them.",
+      "timestamp": "2025-10-26T04:25:06.119235"
+    },
+    {
+      "role": "user",
+      "content": "Sir.",
+      "timestamp": "2025-10-26T04:25:10.814779"
+    },
+    {
+      "role": "assistant",
+      "content": "Could you please tell me if you have any diagnosed medical conditions right now?",
+      "timestamp": "2025-10-26T04:25:14.346076"
+    },
+    {
+      "role": "user",
+      "content": "Cancer.",
+      "timestamp": "2025-10-26T04:25:16.260006"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. You currently have cancer. Is that correct?",
+      "timestamp": "2025-10-26T04:25:20.755982"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:25:22.860286"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Are you currently taking any medications? If yes, please list them.",
+      "timestamp": "2025-10-26T04:25:29.168015"
+    },
+    {
+      "role": "user",
+      "content": "I'm thinking advil.",
+      "timestamp": "2025-10-26T04:25:35.866117"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. You are currently taking Advil. Is that correct?",
+      "timestamp": "2025-10-26T04:25:41.601774"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:25:43.657202"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Finally, could you please provide a brief summary of your current condition?",
+      "timestamp": "2025-10-26T04:25:50.066231"
+    },
+    {
+      "role": "user",
+      "content": "I'm coughing.",
+      "timestamp": "2025-10-26T04:25:55.532980"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. You are currently experiencing coughing. Is that correct?",
+      "timestamp": "2025-10-26T04:26:01.189094"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T04:26:03.184215"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for providing all the information, Evan. We will review your details for clinical trial eligibility and get back to you soon. If you have any questions in the meantime, feel free to ask.",
+      "timestamp": "2025-10-26T04:26:15.110380"
+    }
+  ],
+  "message_count": 55,
+  "exported_at": "2025-10-26T04:26:39.713342"
+}

@@ -1,0 +1,6 @@
+# Additional requirements for transcript parsing and database integration
+# Install with: pip install -r requirements-parser.txt
+
+anthropic>=0.39.0
+supabase>=2.9.0
+python-dotenv>=1.0.0
