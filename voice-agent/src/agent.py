@@ -69,7 +69,7 @@ async def entrypoint(ctx: JobContext):
         # Text-to-speech (TTS) is your agent's voice, turning the LLM's text into speech that the user can hear
         # See all available models as well as voice selections at https://docs.livekit.io/agents/models/tts/
         tts=hume.TTS(
-            voice=hume.VoiceByName(name="Colton Rivers", provider=hume.VoiceProvider.hume),
+            voice=hume.VoiceByName(name="Fumiko", provider=hume.VoiceProvider.hume),
             description="The voice exudes calm, serene, and peaceful qualities, like a gentle stream flowing through a quiet forest.",
         ),
         # VAD and turn detection are used to determine when the user is speaking and when the agent should respond
