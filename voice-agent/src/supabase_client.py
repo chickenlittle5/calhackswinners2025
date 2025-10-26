@@ -50,7 +50,7 @@ class SupabasePatientDB:
             result = self.client.table(self.table_name).insert(insert_data).execute()
 
             if result.data:
-                patient_id = result.data[0].get("id")
+                patient_id = result.data[0].get("patient_id")
                 logger.info(f"Successfully inserted patient with ID: {patient_id}")
                 return result.data[0]
             else:
@@ -78,7 +78,7 @@ class SupabasePatientDB:
             update_data["updated_at"] = datetime.now().isoformat()
 
             # Update in Supabase
-            result = self.client.table(self.table_name).update(update_data).eq("id", patient_id).execute()
+            result = self.client.table(self.table_name).update(update_data).eq("patient_id", patient_id).execute()
 
             if result.data:
                 logger.info(f"Successfully updated patient with ID: {patient_id}")
@@ -150,7 +150,7 @@ class SupabasePatientDB:
             Patient record if found, None otherwise
         """
         try:
-            result = self.client.table(self.table_name).select("*").eq("id", patient_id).execute()
+            result = self.client.table(self.table_name).select("*").eq("patient_id", patient_id).execute()
 
             if result.data and len(result.data) > 0:
                 logger.info(f"Found patient with ID: {patient_id}")
@@ -184,7 +184,7 @@ class SupabasePatientDB:
 
         if existing_patient:
             # Update existing record
-            patient_id = existing_patient.get("id")
+            patient_id = existing_patient.get("patient_id")
             logger.info(f"Patient with phone {phone_number} already exists. Updating record {patient_id}.")
             return self.update_patient(patient_id, patient_data)
         else:
@@ -227,7 +227,7 @@ class SupabasePatientDB:
             True if deletion successful, False otherwise
         """
         try:
-            result = self.client.table(self.table_name).delete().eq("id", patient_id).execute()
+            result = self.client.table(self.table_name).delete().eq("patient_id", patient_id).execute()
 
             if result.data:
                 logger.info(f"Successfully deleted patient with ID: {patient_id}")
@@ -239,6 +239,36 @@ class SupabasePatientDB:
         except Exception as e:
             logger.error(f"Error deleting patient {patient_id}: {e}", exc_info=True)
             return False
+
+    def update_eligible_trials(self, patient_id: str, nct_ids: List[str]) -> Optional[Dict[str, Any]]:
+        """
+        Update the current_eligible_trials field for a patient.
+
+        Args:
+            patient_id: UUID of the patient to update
+            nct_ids: List of NCT IDs (clinical trial identifiers)
+
+        Returns:
+            Updated patient record, or None if update fails
+        """
+        try:
+            update_data = {
+                "current_eligible_trials": nct_ids,
+                "updated_at": datetime.now().isoformat()
+            }
+
+            result = self.client.table(self.table_name).update(update_data).eq("patient_id", patient_id).execute()
+
+            if result.data:
+                logger.info(f"Updated eligible trials for patient {patient_id}: {len(nct_ids)} trials")
+                return result.data[0]
+            else:
+                logger.error(f"Failed to update eligible trials for patient {patient_id}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Error updating eligible trials for patient {patient_id}: {e}", exc_info=True)
+            return None
 
     def _prepare_patient_data(self, patient_data: Dict[str, Any]) -> Dict[str, Any]:
         """

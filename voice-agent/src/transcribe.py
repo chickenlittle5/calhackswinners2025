@@ -185,14 +185,37 @@ class TranscriptManager:
                 self._save_backup(patient_data, transcript_filepath)
                 return {"success": False, "error": "Database save failed", "patient_data": patient_data}
 
-            patient_id = saved_record.get("id")
+            patient_id = saved_record.get("patient_id")
             logger.info(f"Successfully saved patient data to Supabase with ID: {patient_id}")
+
+            # Step 3: Match patient to clinical trials
+            try:
+                from clinical_trials_matcher import match_patient_to_trials
+
+                logger.info("Starting clinical trial matching...")
+                nct_ids = match_patient_to_trials(patient_data)
+
+                if nct_ids:
+                    # Update patient record with eligible trials
+                    updated_record = db.update_eligible_trials(patient_id, nct_ids)
+                    if updated_record:
+                        logger.info(f"✅ Matched {len(nct_ids)} clinical trials for patient {patient_id}")
+                    else:
+                        logger.warning(f"Trial matching found {len(nct_ids)} trials but failed to update database")
+                else:
+                    logger.info(f"No matching clinical trials found for patient {patient_id}")
+
+            except Exception as e:
+                logger.error(f"Error during clinical trial matching: {e}", exc_info=True)
+                # Don't fail the whole operation if trial matching fails
+                logger.warning("Continuing despite trial matching error")
 
             return {
                 "success": True,
                 "patient_id": patient_id,
                 "patient_data": patient_data,
-                "database_record": saved_record
+                "database_record": saved_record,
+                "matched_trials": nct_ids if 'nct_ids' in locals() else []
             }
 
         except Exception as e:

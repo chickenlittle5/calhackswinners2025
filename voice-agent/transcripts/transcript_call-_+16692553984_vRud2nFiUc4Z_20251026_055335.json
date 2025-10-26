@@ -1,0 +1,245 @@
+{
+  "metadata": {
+    "room_name": "call-_+16692553984_vRud2nFiUc4Z",
+    "session_start": "2025-10-26T05:49:23.629822"
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello! Can you hear me?",
+      "timestamp": "2025-10-26T05:49:26.352289"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:49:28.093461"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you! Before we proceed, may I have your consent to record this conversation? Please respond with a clear \"yes\" or \"no.\"",
+      "timestamp": "2025-10-26T05:49:36.766707"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:49:38.911079"
+    },
+    {
+      "role": "assistant",
+      "content": "Great! Let's start with your first name, please.",
+      "timestamp": "2025-10-26T05:49:43.930453"
+    },
+    {
+      "role": "user",
+      "content": "Heaven.",
+      "timestamp": "2025-10-26T05:49:47.032710"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Heaven. What is your last name?",
+      "timestamp": "2025-10-26T05:49:50.258360"
+    },
+    {
+      "role": "user",
+      "content": "Trin",
+      "timestamp": "2025-10-26T05:49:59.252503"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you, Heaven Trin. Could you please tell me your date of birth?",
+      "timestamp": "2025-10-26T05:50:03.829622"
+    },
+    {
+      "role": "user",
+      "content": "Ity july twentieth two thousand five",
+      "timestamp": "2025-10-26T05:50:09.395699"
+    },
+    {
+      "role": "assistant",
+      "content": "Just to confirm, is your date of birth July 20, 2005?",
+      "timestamp": "2025-10-26T05:50:14.270391"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:50:16.698521"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your gender?",
+      "timestamp": "2025-10-26T05:50:19.931238"
+    },
+    {
+      "role": "user",
+      "content": "Two thousand sorry.",
+      "timestamp": "2025-10-26T05:50:29.995485"
+    },
+    {
+      "role": "assistant",
+      "content": "No problem. To confirm, is your date of birth July 20, 2002?",
+      "timestamp": "2025-10-26T05:50:35.896674"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:50:37.110273"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your gender?",
+      "timestamp": "2025-10-26T05:50:40.124695"
+    },
+    {
+      "role": "user",
+      "content": "Female.",
+      "timestamp": "2025-10-26T05:50:44.099017"
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks, female. What is your age?",
+      "timestamp": "2025-10-26T05:50:46.924815"
+    },
+    {
+      "role": "user",
+      "content": "Twenty seven",
+      "timestamp": "2025-10-26T05:50:52.805939"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you provide your contact email address?",
+      "timestamp": "2025-10-26T05:50:57.158497"
+    },
+    {
+      "role": "user",
+      "content": "At gmail com.",
+      "timestamp": "2025-10-26T05:51:05.447086"
+    },
+    {
+      "role": "assistant",
+      "content": "I didn't catch the part before at gmail com. Could you please say your full email address again?",
+      "timestamp": "2025-10-26T05:51:11.867317"
+    },
+    {
+      "role": "user",
+      "content": "At gmail com",
+      "timestamp": "2025-10-26T05:51:15.264962"
+    },
+    {
+      "role": "assistant",
+      "content": "Please tell me the part of your email before at gmail com. For example, if your email is john at gmail com, tell me \"john\".",
+      "timestamp": "2025-10-26T05:51:24.869307"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:51:28.523505"
+    },
+    {
+      "role": "assistant",
+      "content": "I need the first part of your email address before at gmail com. Could you please say it?",
+      "timestamp": "2025-10-26T05:51:34.316265"
+    },
+    {
+      "role": "user",
+      "content": "John at gmail com.",
+      "timestamp": "2025-10-26T05:51:36.283495"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Just to confirm your email is john at gmail com, correct?",
+      "timestamp": "2025-10-26T05:51:41.060788"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:51:42.616920"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your phone number?",
+      "timestamp": "2025-10-26T05:51:45.928758"
+    },
+    {
+      "role": "user",
+      "content": "Six six nine two five five three nine eight four",
+      "timestamp": "2025-10-26T05:51:50.810936"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. To confirm, is your phone number 669 255 3984?",
+      "timestamp": "2025-10-26T05:51:58.329426"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:52:00.981131"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. What is your current location?",
+      "timestamp": "2025-10-26T05:52:04.326485"
+    },
+    {
+      "role": "user",
+      "content": "Jose california.",
+      "timestamp": "2025-10-26T05:52:07.405687"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. To confirm, your current location is San Jose, California?",
+      "timestamp": "2025-10-26T05:52:12.654991"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:52:14.518195"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Do you have any currently diagnosed conditions?",
+      "timestamp": "2025-10-26T05:52:19.078843"
+    },
+    {
+      "role": "user",
+      "content": "Cancer.",
+      "timestamp": "2025-10-26T05:52:28.700456"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Are you currently taking any medications for cancer or other conditions?",
+      "timestamp": "2025-10-26T05:52:34.820608"
+    },
+    {
+      "role": "user",
+      "content": "Advil",
+      "timestamp": "2025-10-26T05:52:38.430870"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you. Could you please provide a summary of your current condition?",
+      "timestamp": "2025-10-26T05:52:43.280039"
+    },
+    {
+      "role": "user",
+      "content": "Headaches",
+      "timestamp": "2025-10-26T05:52:46.702786"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for the information. To summarize, your name is Heaven Trin, you were born on July 20, 2002, you are female and 27 years old. Your email is john at gmail com, your phone number is 669-255-3984, and you live in San Jose, California. You have cancer, currently take Advil, and are experiencing headaches. Is all this correct?",
+      "timestamp": "2025-10-26T05:53:09.529709"
+    },
+    {
+      "role": "user",
+      "content": "Yes.",
+      "timestamp": "2025-10-26T05:53:10.039996"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank",
+      "timestamp": "2025-10-26T05:53:10.964596"
+    }
+  ],
+  "message_count": 47,
+  "exported_at": "2025-10-26T05:53:35.723689"
+}
