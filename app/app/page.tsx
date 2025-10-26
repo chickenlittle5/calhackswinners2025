@@ -497,6 +497,35 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
           console.error('Error updating patient with trials:', updateResult.error);
         } else {
           console.log(`✅ Found ${matchData.nctIds.length} eligible trials for patient`);
+          
+          // Send email with trial details
+          if (formData.contact_email) {
+            try {
+              console.log('📧 Sending trial notification email...');
+              const emailResponse = await fetch('/api/send-trial-email', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  patientEmail: formData.contact_email,
+                  patientName: formData.first_name || 'Patient',
+                  nctIds: matchData.nctIds
+                }),
+              });
+
+              const emailData = await emailResponse.json();
+              
+              if (emailData.success) {
+                console.log(`✅ Email sent successfully with ${emailData.trialsFound} trial details`);
+              } else {
+                console.warn('⚠️ Email sending failed:', emailData.error);
+              }
+            } catch (emailError) {
+              console.error('Error sending email:', emailError);
+              // Don't fail if email fails
+            }
+          }
         }
       }
     } catch (matchError) {
@@ -504,7 +533,7 @@ function PatientForm({ onSuccess }: { onSuccess: () => void }) {
       // Don't fail the patient creation if trial matching fails
     }
 
-    alert('Patient added successfully! Finding eligible trials...');
+    alert('Patient added successfully! Finding eligible trials and sending notification email...');
     onSuccess();
   }
 

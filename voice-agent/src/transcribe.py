@@ -201,6 +201,46 @@ class TranscriptManager:
                     updated_record = db.update_eligible_trials(patient_id, nct_ids)
                     if updated_record:
                         logger.info(f"✅ Matched {len(nct_ids)} clinical trials for patient {patient_id}")
+                        
+                        # Step 4: Send email notification with trial details
+                        try:
+                            patient_email = patient_data.get("contact_email")
+                            patient_name = patient_data.get("first_name", "Patient")
+                            
+                            if patient_email:
+                                import requests
+                                import os
+                                
+                                nextjs_api_url = os.getenv("NEXTJS_API_URL", "http://localhost:3001")
+                                email_endpoint = f"{nextjs_api_url}/api/send-trial-email"
+                                
+                                logger.info(f"📧 Sending trial notification email to {patient_email}...")
+                                
+                                email_response = requests.post(
+                                    email_endpoint,
+                                    json={
+                                        "patientEmail": patient_email,
+                                        "patientName": patient_name,
+                                        "nctIds": nct_ids
+                                    },
+                                    timeout=60  # Email sending might take a while
+                                )
+                                
+                                if email_response.status_code == 200:
+                                    email_data = email_response.json()
+                                    if email_data.get("success"):
+                                        logger.info(f"✅ Email sent successfully with {email_data.get('trialsFound', 0)} trial details")
+                                    else:
+                                        logger.warning(f"⚠️ Email API returned error: {email_data.get('error')}")
+                                else:
+                                    logger.warning(f"⚠️ Email API returned status {email_response.status_code}")
+                            else:
+                                logger.info("No email address available, skipping email notification")
+                                
+                        except Exception as email_error:
+                            logger.error(f"Error sending email notification: {email_error}", exc_info=True)
+                            # Don't fail if email fails
+                            logger.warning("Continuing despite email error")
                     else:
                         logger.warning(f"Trial matching found {len(nct_ids)} trials but failed to update database")
                 else:
