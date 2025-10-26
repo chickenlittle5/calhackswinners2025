@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "room_name": "mock_room",
+    "session_start": "2025-10-25T21:59:17.488932"
+  },
+  "transcript": [
+    {
+      "role": "assistant",
+      "content": "Hello, this is [Your Name] from [Your Company]. For quality assurance and training purposes, may I have your permission to record this call? You are free to decline if you prefer. Could you please let me know if that’s okay?",
+      "timestamp": "2025-10-25T21:59:32.536136"
+    },
+    {
+      "role": "user",
+      "content": "No that's not okay.",
+      "timestamp": "2025-10-25T21:59:35.890042"
+    },
+    {
+      "role": "assistant",
+      "content": "Thank you for letting me know. I am unable to proceed without the recording consent, so I will have to end the call. Take care.",
+      "timestamp": "2025-10-25T21:59:44.165225"
+    }
+  ],
+  "message_count": 3,
+  "exported_at": "2025-10-25T21:59:47.247838"
+}

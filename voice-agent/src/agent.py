@@ -30,7 +30,7 @@ class Assistant(Agent):
             instructions="""You are a helpful voice AI assistant. 
             The patient is interacting with you via voice, even if you perceive the conversation as text.
             Your purpose is to determine the eligbility of patients for clinical trials. 
-            You will ask questions to the user for the following information: First Name
+            You will ask questions to the user for the following information: First Name, Last Name, Date of Birth, Gender, Age, zContact Email, Phone Number, Location, and a summary of their current condition
             Ask questions for one field at a time. If the user's response is incomprehensible or doesn't make sense for the question (e.g. "I'm Asian" for "What is your name?" or a 20 digit phone number or an email without a domain), then repeat the question again until you receive a reasonable response.
             However, be patient towards patients and don't rush or be rude towards them.
             Your responses are concise, to the point, and without any complex formatting or punctuation including emojis, asterisks, or other symbols.
@@ -87,7 +87,7 @@ async def entrypoint(ctx: JobContext):
         llm="openai/gpt-4.1-mini",
         # Text-to-speech (TTS) is your agent's voice, turning the LLM's text into speech that the user can hear
         # See all available models as well as voice selections at https://docs.livekit.io/agents/models/tts/
-        tts="cartesia/sonic-2",
+        tts="cartesia/sonic-2:9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
         # tts=hume.TTS(
         #     voice=hume.VoiceByName(name="Colton Rivers", provider=hume.VoiceProvider.hume),
         #     description="The voice exudes calm, serene, and peaceful qualities, like a gentle stream flowing through a quiet forest.",
@@ -127,16 +127,31 @@ async def entrypoint(ctx: JobContext):
     # Capture both user and agent messages when added to chat history
     @session.on("conversation_item_added")
     def _on_conversation_item_added(ev):
+        logger.info(f"Event fired! Event: {ev}")
+        logger.info(f"Item: {ev.item}")
+        logger.info(f"Item role: {ev.item.role}")
+        logger.info(f"Item content: {ev.item.content}")
+
         # Extract text content from the chat message
         message_text = ""
         for content in ev.item.content:
+            logger.info(f"Content item: {content}, Type: {type(content)}")
             if hasattr(content, 'text'):
                 message_text += content.text
+            # Also try alternative attribute names
+            elif hasattr(content, 'content'):
+                message_text += str(content.content)
+            elif isinstance(content, str):
+                message_text += content
 
         role = ev.item.role
+        logger.info(f"Extracted message_text: '{message_text}', role: '{role}'")
+
         if message_text:
             logger.info(f"{role} said: {message_text}")
             transcript_mgr.add_message(role=role, content=message_text)
+        else:
+            logger.warning(f"No text extracted from conversation item!")
 
     async def log_usage():
         summary = usage_collector.get_summary()
@@ -200,4 +215,4 @@ class CollectConsent(AgentTask[bool]):
         self.complete(False)
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="my-telephony-agent", prewarm_fnc=prewarm))
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, prewarm_fnc=prewarm))
