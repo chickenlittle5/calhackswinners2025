@@ -143,8 +143,8 @@ export default function DashboardPage() {
           <div className="flex items-center gap-4 fade-in delay-1">
             <Dialog open={isPatientDialogOpen} onOpenChange={setIsPatientDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-6 py-5">
-                  <Plus className="mr-2 h-5 w-5" /> Add Patient
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5">
+                  <Plus className="mr-2 h-4 w-4" /> Add Patient
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-card border-border max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -163,8 +163,8 @@ export default function DashboardPage() {
 
             <Dialog open={isTrialDialogOpen} onOpenChange={setIsTrialDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-6 py-5">
-                  <Plus className="mr-2 h-5 w-5" /> Add Trial
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-5">
+                  <Plus className="mr-2 h-4 w-4" /> Add Trial
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-card border-border max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -231,21 +231,18 @@ export default function DashboardPage() {
 
           <TabsContent value="patients" className="mt-6">
             <div className="flex justify-between items-center mb-6">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search patients by name, ID, condition..."
-                  className="pl-10 w-[400px] bg-muted"
-                  value={patientSearch}
-                  onChange={(e) => setPatientSearch(e.target.value)}
-                />
-              </div>
+              <Input
+                type="search"
+                placeholder="Search patients by name, ID, condition..."
+                className="w-[300px]"
+                value={patientSearch}
+                onChange={(e) => setPatientSearch(e.target.value)}
+              />
               <div className="flex gap-2">
-                <Button variant="outline">
+                <Button variant="outline" className="text-xs">
                   <Download className="mr-2 h-4 w-4" /> Export CSV
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" className="text-xs">
                   <Filter className="mr-2 h-4 w-4" /> Filter
                 </Button>
               </div>
@@ -296,7 +293,7 @@ export default function DashboardPage() {
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            className="text-sm"
+                            className="text-xs"
                             onClick={() => {
                               setSelectedPatient(patient);
                               setIsViewPatientOpen(true);
@@ -315,21 +312,18 @@ export default function DashboardPage() {
 
           <TabsContent value="trials" className="mt-6">
             <div className="flex justify-between items-center mb-6">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search trials by name, phase, sponsor..."
-                  className="pl-10 w-[400px] bg-muted"
-                  value={trialSearch}
-                  onChange={(e) => setTrialSearch(e.target.value)}
-                />
-              </div>
+              <Input
+                type="search"
+                placeholder="Search trials by name, phase, sponsor..."
+                className="w-[300px]"
+                value={trialSearch}
+                onChange={(e) => setTrialSearch(e.target.value)}
+              />
               <div className="flex gap-2">
-                <Button variant="outline">
+                <Button variant="outline" className="text-xs">
                   <Download className="mr-2 h-4 w-4" /> Export CSV
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" className="text-xs">
                   <Filter className="mr-2 h-4 w-4" /> Filter
                 </Button>
               </div>
@@ -378,7 +372,7 @@ export default function DashboardPage() {
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            className="text-sm"
+                            className="text-xs"
                             onClick={() => {
                               setSelectedTrial(trial);
                               setIsViewTrialOpen(true);

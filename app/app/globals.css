@@ -122,8 +122,11 @@ input[type="date"],
 select,
 textarea {
   background-color: #1a1f2e !important;
-  border-color: #2a3244 !important;
+  border: 1px solid #2a3244 !important;
   color: #e8edf4 !important;
+  border-radius: 6px !important;
+  padding: 10px 16px !important;
+  transition: all 0.3s ease !important;
 }
 
 input[type="text"]:focus,
@@ -137,9 +140,53 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(0, 255, 159, 0.1) !important;
 }
 
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="number"]::placeholder,
+textarea::placeholder {
+  color: #8b95a8 !important;
+}
+
 /* Improved button styling */
 button {
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+/* Button hover effects from HTML */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 255, 159, 0.2);
+}
+
+/* Primary button styling */
+button[class*="bg-primary"] {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border: 1px solid var(--accent-primary);
+}
+
+button[class*="bg-primary"]:hover {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+}
+
+/* Search input styling from HTML */
+input[type="search"],
+input[placeholder*="Search"] {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  font-size: 13px !important;
+  transition: all 0.3s ease !important;
+}
+
+input[type="search"]:focus,
+input[placeholder*="Search"]:focus {
+  box-shadow: 0 0 0 3px rgba(0, 255, 159, 0.1) !important;
 }
 
 /* Background pattern - Original design */
@@ -172,4 +219,62 @@ button {
   width: 4px;
   height: 100%;
   background: linear-gradient(180deg, #00ff9f, #00d4ff);
+}
+
+/* Table styling from HTML */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: var(--bg-secondary);
+}
+
+th {
+  padding: 16px;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+tbody tr {
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(0, 255, 159, 0.02);
+}
+
+/* Card hover effects from HTML */
+[class*="card"]:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(0, 255, 159, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Modal content styling */
+[role="dialog"] {
+  border-radius: 12px !important;
+}
+
+/* Label styling from HTML */
+label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
 }
