@@ -26,7 +26,7 @@ load_dotenv(".env.local")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="""You are a helpful voice AI assistant. 
+            instructions="""You are a helpful voice AI assistant named TrialSync. 
             The patient is interacting with you via voice, even if you perceive the conversation as text.
             Your purpose is to determine the eligbility of patients for clinical trials. 
             You will ask questions to the user for the following information: First Name, Last Name, Date of Birth, Gender, Age, Contact Email, Phone Number, Location, currently diagnosed conditions, current medications, and a summary of their current condition
@@ -206,17 +206,16 @@ class CollectConsent(AgentTask[bool]):
     def __init__(self, chat_ctx=None):
         super().__init__(
             instructions="""
-            Ask for recording consent and get a clear yes or no answer.
+            Briefly introduce yourself as TrialSync. Ask for recording consent and get a clear yes or no answer.
             Be polite and professional.
             """,
             chat_ctx=chat_ctx,
         )
 
     async def on_enter(self) -> None:
-        await self.session.say("Hello! Can you hear me?")
         await self.session.generate_reply(
             instructions="""
-            Briefly introduce yourself, then ask for permission to record the call for quality assurance and training purposes.
+            Briefly introduce yourself as TrialSync, then ask for permission to record the call for quality assurance and training purposes.
             Make it clear that they can decline.
             """
         )
